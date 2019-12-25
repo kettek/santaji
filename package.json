@@ -1,0 +1,19 @@
+{
+  "name": "santaji",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "lasso": "^3.3.1",
+    "lasso-cli": "^2.0.11",
+    "lasso-marko": "^2.4.8",
+    "marko": "^4.18.28"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "lasso --main client.js --plugins lasso-marko --inject-into index.html"
+  },
+  "author": "",
+  "license": "ISC"
+}

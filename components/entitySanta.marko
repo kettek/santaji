@@ -1,0 +1,61 @@
+class {
+    onCreate() {
+        this.state = {
+            emoji: this.getEmoji(),
+        }
+        this.emojis = [
+            '🎅',
+            '🎅🏿',
+            '🎅🏽',
+            '🎅🏼',
+            '🎅🏾',
+            '🎅🏻',
+            '🤶',
+            '🤶🏻',
+            '🤶🏼',
+            '🤶🏽',
+            '🤶🏾',
+            '🤶🏿',
+        ]
+    }
+    onInput(input) {
+        if (input.type) {
+            this.state.emoji = this.emojis[Math.round(input.type % this.emojis.length)]
+        }
+    }
+    getEmoji() {
+        let emojis = [
+            '🎅',
+            '🎅🏿',
+            '🎅🏽',
+            '🎅🏼',
+            '🎅🏾',
+            '🎅🏻',
+            '🤶',
+            '🤶🏻',
+            '🤶🏼',
+            '🤶🏽',
+            '🤶🏾',
+            '🤶🏿',
+        ]
+        return emojis[Math.floor(Math.random() * Math.floor(emojis.length))]
+    }
+    setPosition(x,y) {
+        this.state.x = x
+        this.state.y = y
+    }
+}
+
+style {
+    .entitySanta {
+        position: absolute;
+        transition: all 100ms;
+        color: white;
+    }
+    .entitySanta.-isSelf {
+        text-shadow: 0px 0px 4px #000;
+        transition: all 0ms;
+    }
+}
+
+div.entitySanta style={left: input.x+'px', top: input.y+'px'} class={'-isSelf': input.isSelf} -- ${state.emoji}
