@@ -66,10 +66,10 @@ class {
 
 		// Add a new gift every so often
 		let colors = ['red', 'green', 'blue', 'yellow']
-		if (this.state.giftTimer <= timestamp && this.state.gifts.length < 10) {
+		if (this.state.giftTimer <= timestamp && this.state.gifts.length < 10 && this.state.giftsCollected < 20) {
 			this.state.gifts.push({
-			  x: Math.random()*100,
-			  y: Math.random()*100,
+			  x: Math.random()*90,
+			  y: Math.random()*90,
 				color: colors[Math.floor(Math.random() * colors.length)],
 			})
 			this.state.giftTimer = timestamp + 3000
@@ -148,12 +148,15 @@ style {
     color: white;
     font-family: cursive;
     padding: .25em;
-	}
+  }
+  .giftsCollected.-done {
+    color: yellow;
+  }
 }
 
 div.santaji
   entityMoon x=85 y=10
-  div.giftsCollected -- Gifts Collected: ${state.giftsCollected}
+  div.giftsCollected class={'-done': state.giftsCollected==20} -- Gifts Collected: ${state.giftsCollected} / 20
   for|tree| of=state.trees
 	  entityTree x=tree.x
   for|gift, giftIndex| of=state.gifts
