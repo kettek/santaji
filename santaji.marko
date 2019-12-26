@@ -156,7 +156,7 @@ style {
 
 div.santaji
   entityMoon x=85 y=10
-  div.giftsCollected class={'-done': state.giftsCollected==20} -- Gifts Collected: ${state.giftsCollected} / 20
+  div.giftsCollected class={'-done': state.giftsCollected>=20} -- Gifts Collected: ${state.giftsCollected} / 20
   for|tree| of=state.trees
 	  entityTree x=tree.x
   for|gift, giftIndex| of=state.gifts
