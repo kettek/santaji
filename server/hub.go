@@ -36,10 +36,6 @@ func (h *Hub) run() {
 		select {
 		case client := <-h.register:
 			h.clients[client] = true
-			go func() {
-				message := []byte(fmt.Sprintf("{\"n\":%d}", client.id))
-				h.broadcast <- message
-			}()
 			for client := range h.clients {
 				cl := client
 				go func() {

@@ -30,9 +30,8 @@ const (
 )
 
 var (
-	newline  = []byte{'\n'}
-	space    = []byte{' '}
-	globalID = int64(0)
+	newline = []byte{'\n'}
+	space   = []byte{' '}
 )
 
 var upgrader = websocket.Upgrader{
@@ -51,7 +50,7 @@ type Client struct {
 	send chan []byte
 
 	// Id
-	id int64
+	id int32
 }
 
 // readPump pumps messages from the websocket connection to the hub.
@@ -75,7 +74,7 @@ func (c *Client) readPump() {
 			}
 			break
 		}
-		message = bytes.TrimSpace([]byte(fmt.Sprintf("{\"c\":%d,\"p\":%s}", c.id, bytes.Replace(message, newline, space, -1))))
+		message = []byte(fmt.Sprintf("{\"c\":%d,\"p\":%s}", c.id, bytes.Replace(message, newline, space, -1)))
 		c.hub.broadcast <- message
 	}
 }
@@ -133,14 +132,14 @@ func serveWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
-	client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256), id: rand.Int63()}
+	client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256), id: rand.Int31()}
 	client.hub.register <- client
 
-	/*wr, err := client.conn.NextWriter(websocket.TextMessage)
+	wr, err := client.conn.NextWriter(websocket.TextMessage)
 	if err != nil {
 		return
 	}
-	wr.Write([]byte(fmt.Sprintf("{\"n\":%d}", client.id)))*/
+	wr.Write([]byte(fmt.Sprintf("{\"n\":%d}", client.id)))
 
 	// Allow collection of memory referenced by the caller by doing all work in
 	// new goroutines.
