@@ -9,6 +9,10 @@ class {
       mouseY: 0,
       santas: {},
       snowflakes: [],
+			trees: [],
+			gifts: [],
+			giftTimer: 0,
+			giftsCollected: 0,
       nextSend: 0,
       lastTimestamp: 0,
     }
@@ -21,6 +25,13 @@ class {
     window.addEventListener('keyup', this.onKeyUp.bind(this))
     //document.body.addEventListener('mousemove', this.onMouseMove.bind(this))
     //document.body.addEventListener('touchmove', this.onTouchMove.bind(this))
+
+		// Create our trees
+		for (let i = 0; i < 6; i++) {
+			this.state.trees.push({
+			  x: Math.random()*100
+			})
+		}
   }
 	onMount() {
     this.el.addEventListener('mousemove', this.onMouseMove.bind(this))
@@ -52,6 +63,17 @@ class {
         deathTime: timestamp + 22000
       })
     }
+
+		// Add a new gift every so often
+		let colors = ['red', 'green', 'blue', 'yellow']
+		if (this.state.giftTimer <= timestamp && this.state.gifts.length < 10) {
+			this.state.gifts.push({
+			  x: Math.random()*100,
+			  y: Math.random()*100,
+				color: colors[Math.floor(Math.random() * colors.length)],
+			})
+			this.state.giftTimer = timestamp + 3000
+		}
 
     this.state.lastTimestamp = timestamp
     requestAnimationFrame(this.onLoop)
@@ -88,6 +110,10 @@ class {
     if (!this.state.santas[n]) return
     delete this.state.santas[n]
   }
+	onGiftRemove(i) {
+    this.state.gifts = this.state.gifts.filter((gift, giftIndex) => giftIndex != i)
+    this.state.giftsCollected++
+	}
 }
 
 style {
@@ -114,10 +140,24 @@ style {
     background: -olinear-gradient(to top, #283E51, #0A2342); 
     overflow: hidden;
   }
+	.giftsCollected {
+    position: absolute;
+    top: 0;
+    right: 0;
+    pointer-events: none;
+    color: white;
+    font-family: cursive;
+    padding: .25em;
+	}
 }
 
 div.santaji
   entityMoon x=85 y=10
+  div.giftsCollected -- Gifts Collected: ${state.giftsCollected}
+  for|tree| of=state.trees
+	  entityTree x=tree.x
+  for|gift, giftIndex| of=state.gifts
+	  entityGift x=gift.x y=gift.y color=gift.color on-remove('onGiftRemove', giftIndex)
   for|snowflake| of=state.snowflakes
     entitySnowflake x=snowflake.x y=snowflake.y
   for|santaKey, santaData| in=state.santas

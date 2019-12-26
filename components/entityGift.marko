@@ -1,0 +1,13 @@
+class {
+	handleClick(e) {
+		this.emit('remove')
+	}
+}
+
+style {
+	.entityGift {
+		position: absolute;
+	}
+}
+
+div.entityGift style={left: input.x+'%', top: input.y+'%', color: input.color} on-click('handleClick') -- 🎁
