@@ -19,8 +19,13 @@ class {
 
     window.addEventListener('keydown', this.onKeyDown.bind(this))
     window.addEventListener('keyup', this.onKeyUp.bind(this))
-    document.body.addEventListener('mousemove', this.onMouseMove.bind(this))
+    //document.body.addEventListener('mousemove', this.onMouseMove.bind(this))
+    //document.body.addEventListener('touchmove', this.onTouchMove.bind(this))
   }
+	onMount() {
+    this.el.addEventListener('mousemove', this.onMouseMove.bind(this))
+		this.el.addEventListener('touchmove', this.onTouchMove.bind(this))
+	}
   onLoop(timestamp) {
     let delta = timestamp - this.state.lastTimestamp
     if (this.state.nextSend <= timestamp) {
@@ -35,8 +40,8 @@ class {
       if (snowflake.deathTime <= timestamp) {
         return false
       }
-      snowflake.x += Math.random()*.2
-      snowflake.y += Math.random()*.2
+      snowflake.x += Math.random()*(delta/100)
+      snowflake.y += Math.random()*(delta/100)
       return true
     })
 
@@ -44,7 +49,7 @@ class {
       this.state.snowflakes.push({
         x: -10,
         y: -100 + Math.random()*200,
-        deathTime: timestamp + 20000
+        deathTime: timestamp + 22000
       })
     }
 
@@ -61,6 +66,10 @@ class {
     this.state.mouseX = e.clientX
     this.state.mouseY = e.clientY
   }
+  onTouchMove(e) {
+    this.state.mouseX = e.clientX
+    this.state.mouseY = e.clientY
+	}
   onSantaChange(n, e) {
     if (!this.state.santas[n]) return
     this.state.santas[n].tx = e.tx
@@ -91,7 +100,7 @@ style {
     margin: 0;
     width: 100%;
     height: 100%;
-    font-size: 2vw;
+    font-size: 4vmin;
   }
   .santaji {
     display: block;
@@ -108,10 +117,10 @@ style {
 }
 
 div.santaji
+  entityMoon x=85 y=10
   for|snowflake| of=state.snowflakes
     entitySnowflake x=snowflake.x y=snowflake.y
   for|santaKey, santaData| in=state.santas
-    div -- ${santaKey} ${santaData.tx}
     if(santaData.isSelf)
       entitySanta key=santaKey x=state.mouseX y=state.mouseY isSelf=santaData.isSelf type=santaKey
     else
