@@ -66,7 +66,7 @@ class {
 
 		// Add a new gift every so often
 		let colors = ['red', 'green', 'blue', 'yellow']
-		if (this.state.giftTimer <= timestamp && this.state.gifts.length < 10 && this.state.giftsCollected < 20) {
+		if (this.state.giftTimer <= timestamp && this.state.gifts.length < 4 && this.state.giftsCollected < 12) {
 			this.state.gifts.push({
 			  x: Math.random()*90,
 			  y: Math.random()*90,
@@ -152,11 +152,34 @@ style {
   .giftsCollected.-done {
     color: yellow;
   }
+	.merryChristmas {
+    font-size: 400%;
+    font: cursive;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: white;
+	}
+  .merry {
+  }
+  .Christmas {
+    font-weight: bold;
+  }
 }
 
 div.santaji
+  if(state.giftsCollected >= 12)
+    div.merryChristmas
+      span.merry -- Merry
+      span.Christmas -- Christmas!
   entityMoon x=85 y=10
-  div.giftsCollected class={'-done': state.giftsCollected>=20} -- Gifts Collected: ${state.giftsCollected} / 20
+  div.giftsCollected class={'-done': state.giftsCollected>=12} -- Gifts Collected: ${state.giftsCollected} / 12
   for|tree| of=state.trees
 	  entityTree x=tree.x
   for|gift, giftIndex| of=state.gifts
