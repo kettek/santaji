@@ -18,19 +18,22 @@ Connection.prototype.onNetClose = function(e) {
     console.log(e)
 }
 Connection.prototype.onNetMessage = function(e) {
-    let data = JSON.parse(e.data)
-    if (data.d) {
-        this.onSantaRemove(data.d)
-    } else if (data.n) {
-        if (this.isFirst) {
-            this.onSantaNew(data.n, true)
-            this.isFirst = false
-        } else {
-            this.onSantaNew(data.n)
-        }
-    } else if (data.c) {
-        this.onSantaChange(data.c,data.p)
-    }
+		let parts = e.data.split('\n')
+		for (let i = 0; i < parts.length; i++) {
+    	let data = JSON.parse(parts[i])
+    	if (data.d) {
+    	    this.onSantaRemove(data.d)
+    	} else if (data.n) {
+    	    if (this.isFirst) {
+    	        this.onSantaNew(data.n, true)
+    	        this.isFirst = false
+    	    } else {
+    	        this.onSantaNew(data.n)
+    	    }
+    	} else if (data.c) {
+    	    this.onSantaChange(data.c,data.p)
+    	}
+	}
 }
 Connection.prototype.send = function(data) {
     if (this.ws.readyState == 0) {
